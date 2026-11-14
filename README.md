@@ -1,8 +1,8 @@
 # Ante
 
-One sourced page for the 30 days before a meeting.
+**One sourced page covering the 30 days before your meeting.**
 
-Ante is a pre-meeting briefing agent for the Global AI Hackathon, Problem 05 (Tavily Research Agent). You give it a company or a person and a meeting time. It researches news, launches, hires, and other updates in the 30 days before that meeting, then writes a one-page brief. A finding is printed only when its URL was returned by Tavily for that window. Bifrost is the only path to the model.
+Ante is an AI-powered pre-meeting briefing agent developed for the Global AI Hackathon – Problem 05 (Tavily Research Agent). Simply enter a company or person's name and the meeting date. Ante researches relevant news, product launches, hiring updates, deals, and other developments from the preceding 30 days, then generates a concise, one-page briefing. Every finding must be backed by a source URL returned by Tavily within the research window. Bifrost serves as the exclusive gateway for all AI model interactions, while an independent citation-validation system ensures that unsupported claims never appear as verified facts.
 
 ## Why this, and not a generic summary
 
