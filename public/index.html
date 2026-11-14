@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ante — the 30 days before the meeting</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect fill='%231c1712' width='32' height='32'/><text x='6' y='23' fill='%23fbf6ee' font-size='18' font-family='Georgia'>A</text></svg>" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">Ante</div>
+      <p>Global AI Hackathon · Problem 05 · Tavily search, Bifrost writing</p>
+    </header>
+
+    <main>
+      <section class="panel">
+        <p class="eyebrow">Pre-meeting brief</p>
+        <h1>The 30 days before you walk in, on one sourced page.</h1>
+        <p class="lede">
+          Ante searches news, launches, hires, and other updates in the window before the meeting.
+          A claim is printed only when its URL came back from that search. Everything else is held back.
+        </p>
+
+        <form id="brief-form">
+          <fieldset class="kind">
+            <legend>Meeting with</legend>
+            <label><input type="radio" name="kind" value="company" checked /> Company</label>
+            <label><input type="radio" name="kind" value="person" /> Person</label>
+          </fieldset>
+
+          <label>
+            Name
+            <input name="subject" required maxlength="120" placeholder="Stripe" autocomplete="off" />
+          </label>
+
+          <label>
+            Meeting time
+            <input name="meeting" type="datetime-local" required />
+          </label>
+
+          <label>
+            Purpose
+            <select name="purpose">
+              <option value="sales">Sales call</option>
+              <option value="partnership">Partnership</option>
+              <option value="investor">Investor meeting</option>
+              <option value="business-development">Business development</option>
+              <option value="general" selected>General</option>
+            </select>
+          </label>
+
+          <label>
+            What you want from the meeting
+            <textarea name="goal" maxlength="400" placeholder="See whether their last month changes the conversation."></textarea>
+          </label>
+
+          <button type="submit" id="submit">Prepare the page</button>
+          <p class="fine" id="credit-note">Each briefing runs 4 Tavily searches, then one Bifrost completion.</p>
+        </form>
+
+        <p class="banner" id="banner" hidden></p>
+      </section>
+
+      <section class="stage">
+        <div id="live" class="live" aria-live="polite"></div>
+        <article id="sheet" class="sheet">
+          <header class="mast">
+            <div>
+              <p class="eyebrow">One page</p>
+              <h2>Waiting for a meeting</h2>
+            </div>
+            <p class="stamp">Source-gated</p>
+          </header>
+          <p class="empty-copy" id="empty-copy">
+            Ante leaves this page blank until Tavily returns sources. Findings that appear here each carry a link from the 30 days before the meeting. If the model states something those links do not support, it is listed as held back and is not treated as fact.
+          </p>
+          <div id="sheet-body"></div>
+        </article>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
