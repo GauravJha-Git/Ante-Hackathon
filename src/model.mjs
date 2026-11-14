@@ -6,14 +6,58 @@ function bifrostBase() {
 
 export function parseModelJson(text) {
   const trimmed = String(text || "").trim();
-  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const raw = fenced ? fenced[1] : trimmed;
-  const start = raw.indexOf("{");
-  const end = raw.lastIndexOf("}");
-  if (start === -1 || end === -1) {
-    throw new Error("Bifrost returned a reply that was not JSON.");
+  const fenced = [...trimmed.matchAll(/```(?:json)?\s*([\s\S]*?)```/g)].map((match) => match[1]);
+  const blocks = fenced.length ? fenced : [trimmed];
+  let fallback = null;
+  for (const block of blocks) {
+    for (const blob of extractJsonObjects(block)) {
+      try {
+        const value = JSON.parse(blob);
+        if (!value || typeof value !== "object" || Array.isArray(value)) continue;
+        if (Array.isArray(value.findings) || typeof value.oneLine === "string") return value;
+        fallback = fallback || value;
+      } catch {
+        // A reasoning trace can contain braces that are not the briefing.
+      }
+    }
   }
-  return JSON.parse(raw.slice(start, end + 1));
+  if (fallback) return fallback;
+  throw new Error("Bifrost returned a reply that was not JSON.");
+}
+
+function extractJsonObjects(text) {
+  const found = [];
+  const source = String(text || "");
+  for (let index = 0; index < source.length; index += 1) {
+    if (source[index] !== "{") continue;
+    const end = matchingBrace(source, index);
+    if (end === -1) continue;
+    found.push(source.slice(index, end + 1));
+    index = end;
+  }
+  return found;
+}
+
+function matchingBrace(source, start) {
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (char === "\\") escaped = true;
+      else if (char === '"') inString = false;
+      continue;
+    }
+    if (char === '"') inString = true;
+    else if (char === "{") depth += 1;
+    else if (char === "}") {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return -1;
 }
 
 function formatSources(sources) {
@@ -25,7 +69,9 @@ function formatSources(sources) {
     .join("\n\n");
 }
 
-async function complete(messages, jsonMode = true) {
+async function complete(messages, options = {}) {
+  const jsonMode = options.jsonMode !== false;
+  const quietReasoning = options.quietReasoning !== false;
   const base = bifrostBase();
   const body = {
     model: process.env.BIFROST_MODEL || "gpt-4o-mini",
@@ -34,6 +80,9 @@ async function complete(messages, jsonMode = true) {
     messages,
   };
   if (jsonMode) body.response_format = { type: "json_object" };
+  // Free OpenRouter models often spend the whole reply on hidden reasoning and
+  // leave message.content empty. Ask for the answer in the message itself.
+  if (quietReasoning) body.reasoning = { effort: "none", exclude: true };
 
   let response;
   try {
@@ -59,27 +108,48 @@ async function complete(messages, jsonMode = true) {
 
   if (!response.ok) {
     const detail = (await response.text()).slice(0, 220);
-    if (jsonMode && (response.status === 400 || response.status === 422)) return complete(messages, false);
+    if (response.status === 400 || response.status === 422) {
+      if (jsonMode) return complete(messages, { jsonMode: false, quietReasoning });
+      if (quietReasoning) return complete(messages, { jsonMode: false, quietReasoning: false });
+    }
     throw new Error(`Bifrost request failed (${response.status}). ${detail}`);
   }
 
   const data = await response.json();
   const text = messageText(data?.choices?.[0]?.message);
   if (!text) {
-    if (jsonMode) return complete(messages, false);
+    if (jsonMode) return complete(messages, { jsonMode: false, quietReasoning });
     throw new Error("Bifrost returned an empty completion.");
   }
   return text;
 }
 
-function messageText(message) {
-  const content = message?.content;
-  if (typeof content === "string" && content.trim()) return content;
-  if (Array.isArray(content)) {
-    const joined = content.map((part) => part?.text || part?.content || "").join("").trim();
-    if (joined) return joined;
+function asText(value) {
+  if (typeof value === "string") return value.trim();
+  if (Array.isArray(value)) {
+    return value
+      .map((part) => {
+        if (typeof part === "string") return part;
+        return part?.text || part?.content || part?.summary || "";
+      })
+      .join("")
+      .trim();
   }
   return "";
+}
+
+function hasJsonObject(text) {
+  return text.includes("{") && text.includes("}");
+}
+
+export function messageText(message) {
+  const content = asText(message?.content);
+  const reasoning = [asText(message?.reasoning), asText(message?.reasoning_content), asText(message?.reasoning_details)]
+    .filter(Boolean)
+    .join("\n");
+  if (content && hasJsonObject(content)) return content;
+  if (reasoning && hasJsonObject(reasoning)) return reasoning;
+  return content || reasoning;
 }
 
 export async function writeBrief({ subject, kind, purpose, goal, window, sources }) {
@@ -113,7 +183,8 @@ Rules:
 - confidence is verified only when the source text states the claim directly. Use partial when the wording is softer.
 - An empty findings array is the correct result when the sources are off topic.
 - 3 discussion points and 3 open questions. Phrase them as conversation, not as extra facts.
-- Do not invent numbers, dates, quotes, titles, or customers.`,
+- Do not invent numbers, dates, quotes, titles, or customers.
+- Write the JSON object in the message itself. Do not leave the message blank.`,
     },
     {
       role: "user",

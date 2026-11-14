@@ -1,7 +1,7 @@
 import { addDays, researchWindow } from "../src/window.mjs";
 import { applyGate } from "../src/gate.mjs";
 import { normalizeUrl, dedupeSources } from "../src/sources.mjs";
-import { parseModelJson } from "../src/model.mjs";
+import { messageText, parseModelJson } from "../src/model.mjs";
 import { planQueries } from "../src/queries.mjs";
 
 let failed = 0;
@@ -93,6 +93,21 @@ assert(undated.findings[0].confidence === "partial", "undated source is partial"
 
 const parsed = parseModelJson('```json\n{"findings":[]}\n```');
 assert(Array.isArray(parsed.findings), "parse fenced json");
+
+const buried = parseModelJson('Thinking about {not json\n{"oneLine":"Thin record.","findings":[]}');
+assert(buried.oneLine === "Thin record.", "parse json buried in reasoning");
+
+const fromReasoning = messageText({
+  content: "",
+  reasoning: '{"oneLine":"From reasoning.","findings":[]}',
+});
+assert(fromReasoning.includes("From reasoning."), "empty content falls back to reasoning");
+
+const prefersContent = messageText({
+  content: '{"oneLine":"Visible.","findings":[]}',
+  reasoning: '{"oneLine":"Hidden.","findings":[]}',
+});
+assert(prefersContent.includes("Visible."), "visible json wins over reasoning");
 
 assert(planQueries("Ada Lovelace", "person").length === 4, "person plan");
 assert(planQueries("Stripe", "company")[1].label === "Launches", "company launches query");
