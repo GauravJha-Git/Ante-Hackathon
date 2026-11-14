@@ -18,7 +18,7 @@ export async function tavilySearch({ query, topic, startDate, endDate }) {
       include_answer: false,
       include_raw_content: false,
     }),
-    signal: AbortSignal.timeout(30000),
+    signal: AbortSignal.timeout(45000),
   });
 
   if (!response.ok) {

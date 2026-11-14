@@ -30,7 +30,7 @@ async function complete(messages, jsonMode = true) {
   const body = {
     model: process.env.BIFROST_MODEL || "gpt-4o-mini",
     temperature: 0.1,
-    max_tokens: 1100,
+    max_tokens: 4000,
     messages,
   };
   if (jsonMode) body.response_format = { type: "json_object" };
@@ -44,9 +44,12 @@ async function complete(messages, jsonMode = true) {
         Authorization: `Bearer ${process.env.BIFROST_API_KEY}`,
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(45000),
+      signal: AbortSignal.timeout(300000),
     });
   } catch (error) {
+    if (error?.name === "TimeoutError" || /aborted due to timeout/i.test(String(error?.message || ""))) {
+      throw new Error("The model took too long to answer. Wait a moment, then prepare the page again.");
+    }
     const refused = error?.cause?.code === "ECONNREFUSED" || String(error?.message || "").includes("fetch failed");
     if (refused) {
       throw new Error(`Could not reach Bifrost at ${base}. Start the gateway, or set BIFROST_BASE_URL in .env.`);
@@ -61,9 +64,22 @@ async function complete(messages, jsonMode = true) {
   }
 
   const data = await response.json();
-  const text = data?.choices?.[0]?.message?.content;
-  if (!text) throw new Error("Bifrost returned an empty completion.");
+  const text = messageText(data?.choices?.[0]?.message);
+  if (!text) {
+    if (jsonMode) return complete(messages, false);
+    throw new Error("Bifrost returned an empty completion.");
+  }
   return text;
+}
+
+function messageText(message) {
+  const content = message?.content;
+  if (typeof content === "string" && content.trim()) return content;
+  if (Array.isArray(content)) {
+    const joined = content.map((part) => part?.text || part?.content || "").join("").trim();
+    if (joined) return joined;
+  }
+  return "";
 }
 
 export async function writeBrief({ subject, kind, purpose, goal, window, sources }) {

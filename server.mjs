@@ -98,6 +98,8 @@ const server = http.createServer(async (req, res) => {
 });
 
 const port = Number(process.env.PORT || 3000);
+server.requestTimeout = 12 * 60 * 1000;
+server.headersTimeout = 13 * 60 * 1000;
 server.on("error", (error) => {
   if (error.code === "EADDRINUSE") {
     console.error(`Port ${port} is already in use. Set PORT in .env to a free port.`);
