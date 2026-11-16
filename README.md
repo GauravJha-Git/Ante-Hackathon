@@ -31,37 +31,88 @@ Ante takes a company or a person, the meeting time, and the kind of conversation
 
 **Stack:** Node.js server, Tavily Search API, Bifrost OpenAI-compatible chat completions. No extra packages.
 
-## Run it
+## Start locally
 
-Node 20 or newer is enough. There is no install step.
+You need two processes: Bifrost on port 8080, then Ante. Node 20 or newer is enough. Ante has no install step. Bifrost is started with `npx`.
 
-```bash
-cd ante
+The OpenRouter key stays inside Bifrost. Ante's `.env` gets the Bifrost virtual key (`sk-bf-...`), never the OpenRouter key.
+
+### 1. Configure Ante
+
+From the `ante` folder:
+
+```powershell
 copy .env.example .env
 ```
 
 Fill in `.env`:
 
-- `TAVILY_API_KEY` from [app.tavily.com](https://app.tavily.com). Hackathon coupon `GEEKROOM2` if the credits are not on the account yet.
-- `BIFROST_BASE_URL` — local gateway is `http://localhost:8080/openai/v1`
-- `BIFROST_API_KEY` — your Bifrost virtual key
-- `BIFROST_MODEL` — a model your gateway already serves, such as `gpt-4o-mini`
+| Variable | What to put |
+| --- | --- |
+| `TAVILY_API_KEY` | Key from [app.tavily.com](https://app.tavily.com). Coupon `GEEKROOM2` if the account has no credits yet. |
+| `BIFROST_BASE_URL` | `http://localhost:8080/openai/v1` |
+| `BIFROST_API_KEY` | Bifrost virtual key from step 3. Leave this blank until that key exists. |
+| `BIFROST_MODEL` | `openrouter/openrouter/free` for the free OpenRouter route, or another model id Bifrost is serving. |
+| `TAVILY_SEARCH_DEPTH` | `basic` while testing (1 credit per search, 4 per briefing). `advanced` is 2 credits per search. |
+| `PORT` | `3010` in the example, because 3000 is often already taken. Ante prints the URL it actually bound. |
 
-Start Bifrost in another terminal if it is not already running:
+`.env` is gitignored. Do not commit it.
 
-```bash
+### 2. Start Bifrost
+
+Open a terminal in the `ante` folder. The first launch needs a setup token before the process starts. Pick a long random string and keep it for the dashboard screen.
+
+```powershell
+$env:BIFROST_SETUP_TOKEN = "paste-a-long-random-string"
 npx -y @maximhq/bifrost
 ```
 
-Then:
+Leave this terminal open. The dashboard is http://localhost:8080.
 
-```bash
+On the first visit:
+
+1. Paste the setup token and create the admin account.
+2. Turn on dashboard auth and **Enforce auth on inference**.
+3. Skip the CORS restriction.
+4. Add a provider. For the free path, add **OpenRouter** and paste the OpenRouter API key there. That key is stored by Bifrost. It does not go in Ante's `.env`.
+5. Later launches of this same machine can be just `npx -y @maximhq/bifrost`. The account and provider are already saved.
+
+### 3. Create the virtual key
+
+In the Bifrost dashboard, create a virtual key. It starts with `sk-bf-`.
+
+Put that value in `.env` as `BIFROST_API_KEY`. Ante sends it as `Authorization: Bearer`. With inference auth on, a request without this key is rejected.
+
+Set `BIFROST_MODEL` to a model that provider can serve. The free router used for this project is:
+
+```
+BIFROST_MODEL=openrouter/openrouter/free
+```
+
+### 4. Start Ante
+
+In a second terminal, from the `ante` folder:
+
+```powershell
 node server.mjs
 ```
 
-Open http://localhost:3000
+`npm start` does the same thing. The terminal should print:
 
-While testing, keep `TAVILY_SEARCH_DEPTH=basic` (4 credits per briefing). Switch to `advanced` for the demo (8 credits). A full run is 4 searches plus one Bifrost completion.
+```
+Ante is running at http://localhost:3010
+Tavily key: set · Bifrost key: set
+```
+
+The port is whatever `PORT` is in `.env`. Open that URL. If either key is missing, the page shows a banner and will not run a briefing.
+
+### 5. Prepare a page
+
+Use a company or a person, a meeting time, a purpose, and a goal. **Prepare the page** runs 4 Tavily searches, then one Bifrost completion. On the free OpenRouter route the model often takes one to five minutes. Wait for the page. Do not refresh while the trace is still moving.
+
+### Stop
+
+Press Ctrl+C in the Ante terminal, then Ctrl+C in the Bifrost terminal.
 
 ## Demo script
 
