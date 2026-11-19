@@ -24,8 +24,28 @@
 
   /* Typography */
   --font-serif: "Instrument Serif", Georgia, serif;
-  --font-sans: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-sans: "Manrope", "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
+  --font-decorative: "Bricolage Grotesque", "Segoe UI", sans-serif;
+
+  /* Typography scale */
+  --size-wordmark: 2.4rem;
+  --size-heading-main: 2.6rem;
+  --size-heading-report: 2.9rem;
+  --size-heading-section: 1.85rem;
+  --size-finding-title: 1.25rem;
+  --size-body: 1rem;
+  --size-label: 0.9rem;
+  --size-input: 1rem;
+  --size-button: 0.95rem;
+  --size-meta: 0.7rem;
+  --size-source: 0.95rem;
+
+  /* Line heights */
+  --lh-body: 1.6;
+  --lh-heading: 1.15;
+  --lh-finding: 1.55;
+  --lh-meta: 1.4;
 
   /* Spacing */
   --space-1: 0.5rem;
@@ -87,33 +107,34 @@ body::before {
 /* --- Typography --- */
 h1, h2, h3, .wordmark, .eyebrow-serif {
   font-family: var(--font-serif);
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--espresso);
 }
 
 h1 {
-  font-size: 2.1rem;
-  line-height: 1.1;
+  font-size: var(--size-heading-main);
+  line-height: var(--lh-heading);
 }
 
 h2 {
-  font-size: 1.75rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-report);
+  line-height: var(--lh-heading);
 }
 
 h3 {
-  font-size: 1.25rem;
-  line-height: 1.2;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
 }
 
 p {
   color: var(--espresso);
+  line-height: var(--lh-body);
 }
 
 label, .field-label {
   font-family: var(--font-sans);
-  font-size: 0.82rem;
+  font-size: var(--size-label);
   font-weight: 500;
   letter-spacing: 0.02em;
   color: var(--espresso);
@@ -263,9 +284,9 @@ input, select, textarea, button {
 
 .wordmark {
   font-family: var(--font-serif);
-  font-size: 1.9rem;
-  font-weight: 600;
-  letter-spacing: -0.04em;
+  font-size: var(--size-wordmark);
+  font-weight: 400;
+  letter-spacing: -0.03em;
   color: var(--espresso);
   line-height: 1;
   transition: color var(--dur-fast), transform var(--dur-fast);
@@ -278,10 +299,10 @@ input, select, textarea, button {
 }
 
 .descriptor {
-  font-family: var(--font-sans);
-  font-size: 0.66rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-family: var(--font-decorative);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #6e645a;
   margin-top: 0.12rem;
@@ -308,16 +329,16 @@ input, select, textarea, button {
 
 .stage-number {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.68rem;
+  font-weight: 500;
   letter-spacing: 0.06em;
   color: #6e645a;
   line-height: 1;
 }
 
 .stage-label {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -370,17 +391,22 @@ input, select, textarea, button {
 
 .meta-line {
   font-family: var(--font-mono);
-  font-size: 0.64rem;
+  font-size: var(--size-meta);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--espresso);
-  line-height: 1;
+  line-height: var(--lh-meta);
 }
 
 .meta-sub {
-  color: #6e645a;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
   font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6e645a;
+  line-height: var(--lh-meta);
   opacity: 0.9;
 }
 
@@ -492,16 +518,17 @@ main {
 
 .input-heading {
   font-family: var(--font-serif);
-  font-size: 1.9rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-main);
+  line-height: var(--lh-heading);
   margin-bottom: 0.5rem;
 }
 
 .input-subtitle {
-  font-size: 1.05rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
   color: #6e645a;
   margin-bottom: 2rem;
-  line-height: 1.5;
+  line-height: var(--lh-body);
 }
 
 .form-surface {
@@ -519,7 +546,7 @@ main {
 
 .kind-legend {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -538,7 +565,8 @@ main {
 .segmented label {
   flex: 1;
   padding: 0.62rem 0.85rem;
-  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-label);
   font-weight: 500;
   text-align: center;
   cursor: pointer;
@@ -586,7 +614,7 @@ textarea {
   color: var(--espresso);
   padding: 0.7rem 0.8rem;
   border-radius: var(--radius-sm);
-  font-size: 0.95rem;
+  font-size: var(--size-input);
   transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
 }
 
@@ -603,7 +631,7 @@ button:focus-visible {
 textarea {
   min-height: 5.5rem;
   resize: vertical;
-  line-height: 1.5;
+  line-height: var(--lh-body);
 }
 
 /* --- Segmented controls for kind --- */
@@ -619,7 +647,8 @@ textarea {
   border: 1px solid var(--muted-sand);
   background: #ffffff;
   border-radius: var(--radius-sm);
-  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-label);
   font-weight: 500;
   text-align: center;
   cursor: pointer;
@@ -678,8 +707,9 @@ textarea {
 
 .suggestion-item {
   padding: 0.55rem 0.9rem;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
   cursor: pointer;
   border-bottom: 1px solid var(--muted-sand);
   transition: background var(--dur-fast);
@@ -711,7 +741,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.9rem 1.2rem;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: var(--size-button);
   font-weight: 600;
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -747,10 +777,10 @@ textarea {
 .credit-note {
   margin-top: 0.9rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.08em;
   color: #6e645a;
-  line-height: 1.5;
+  line-height: var(--lh-meta);
 }
 
 .banner {
@@ -776,16 +806,17 @@ textarea {
 
 .process-heading {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-main);
+  line-height: var(--lh-heading);
   margin-bottom: 0.4rem;
 }
 
 .process-subtitle {
-  font-size: 1.05rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
   color: #6e645a;
   margin-bottom: 1.5rem;
-  line-height: 1.5;
+  line-height: var(--lh-body);
 }
 
 .process-meta {
@@ -798,7 +829,7 @@ textarea {
 
 .meta-chip {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #6e645a;
@@ -851,7 +882,7 @@ textarea {
 
 .viz-doc-header {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #6e645a;
@@ -961,7 +992,7 @@ textarea {
   transform: translateX(-50%);
   z-index: 6;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #6e645a;
@@ -984,7 +1015,7 @@ textarea {
 
 .stage-legend {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -1030,8 +1061,8 @@ textarea {
 
 .stage-number {
   display: block;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: var(--size-meta);
+  font-weight: 500;
   margin-bottom: 0.15rem;
 }
 
@@ -1071,7 +1102,7 @@ textarea {
 
 .categories h3 {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -1121,22 +1152,23 @@ textarea {
   gap: 0.6rem;
   padding: 0.55rem 0;
   border-bottom: 1px solid var(--muted-sand);
-  font-size: 0.88rem;
-  line-height: 1.4;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
 }
 
 .live-item:last-child { border-bottom: none; }
 
 .live-time {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--size-meta);
   color: #6e645a;
   white-space: nowrap;
 }
 
 .live-label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #6e645a;
@@ -1159,14 +1191,16 @@ textarea {
 
 .error-state h2 {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin-bottom: 0.75rem;
 }
 
 .error-state p {
+  font-family: var(--font-sans);
   color: #6e645a;
   margin-bottom: 1.5rem;
-  line-height: 1.5;
+  line-height: var(--lh-body);
 }
 
 .btn-tertiary {
@@ -1176,7 +1210,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.75rem 1.4rem;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: var(--size-label);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--dur-fast);
@@ -1209,8 +1243,8 @@ textarea {
 }
 
 .report-kicker {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-decorative);
+  font-size: var(--size-meta);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--terracotta);
@@ -1220,8 +1254,8 @@ textarea {
 
 .report-title {
   font-family: var(--font-serif);
-  font-size: 2.6rem;
-  line-height: 1.1;
+  font-size: var(--size-heading-report);
+  line-height: var(--lh-heading);
   margin: 0 0 0.5rem;
   color: var(--espresso);
 }
@@ -1256,7 +1290,7 @@ textarea {
 
 .meta-label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -1264,10 +1298,10 @@ textarea {
 
 .meta-value {
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: var(--size-body);
   color: var(--espresso);
   word-break: break-word;
-  line-height: 1.4;
+  line-height: var(--lh-meta);
 }
 
 /* Executive summary */
@@ -1278,15 +1312,16 @@ textarea {
 
 .exec-summary h2 {
   font-family: var(--font-serif);
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin: 0 0 0.75rem;
   color: var(--espresso);
 }
 
 .exec-summary p {
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
   color: var(--espresso);
   max-width: 62ch;
   margin: 0;
@@ -1299,8 +1334,8 @@ textarea {
 
 .findings-section h2 {
   font-family: var(--font-serif);
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin: 0 0 1.25rem;
   color: var(--espresso);
 }
@@ -1325,8 +1360,8 @@ textarea {
 
 .finding-number {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: var(--size-meta);
+  font-weight: 500;
   color: var(--terracotta);
   min-width: 32px;
   flex-shrink: 0;
@@ -1347,9 +1382,9 @@ textarea {
 
 .finding-title {
   font-family: var(--font-sans);
-  font-size: 1.15rem;
+  font-size: var(--size-finding-title);
   font-weight: 500;
-  line-height: 1.4;
+  line-height: var(--lh-heading);
   color: var(--espresso);
   margin: 0;
   flex: 1;
@@ -1357,10 +1392,10 @@ textarea {
 
 .confidence-badge {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.28rem 0.6rem;
   border-radius: 4px;
   white-space: nowrap;
@@ -1370,8 +1405,9 @@ textarea {
 }
 
 .finding-description {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-finding);
   color: var(--espresso);
   margin-bottom: 0.75rem;
 }
@@ -1380,7 +1416,8 @@ textarea {
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-label);
   color: #6e645a;
   margin-bottom: 0.75rem;
 }
@@ -1427,11 +1464,12 @@ textarea {
 
 /* No findings */
 .no-findings {
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
   padding: 2.5rem 2.5rem;
   text-align: center;
   color: #6e645a;
-  line-height: 1.6;
-  font-size: 0.95rem;
+  line-height: var(--lh-body);
 }
 
 /* Discussion points */
@@ -1442,19 +1480,20 @@ textarea {
 }
 
 .discussion-points h2,
-.open-questions h2 {
+.open-questions h2,
+.held-back-section h2 {
   font-family: var(--font-serif);
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin: 0 0 0.5rem;
   color: var(--espresso);
 }
 
 .section-note {
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-label);
   color: #6e645a;
   margin-bottom: 1rem;
-  font-family: var(--font-sans);
 }
 
 .discussion-points ol,
@@ -1465,9 +1504,9 @@ textarea {
 
 .discussion-points li,
 .open-questions li {
-  margin: 0.6rem 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
   color: var(--espresso);
 }
 
@@ -1479,8 +1518,8 @@ textarea {
 
 .held-back-section h2 {
   font-family: var(--font-serif);
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin: 0 0 1rem;
   color: var(--espresso);
 }
@@ -1488,8 +1527,9 @@ textarea {
 .held-item {
   padding: 0.9rem 0;
   border-top: 1px solid var(--muted-sand);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
 }
 
 .held-item:first-child {
@@ -1503,7 +1543,7 @@ textarea {
 
 .held-reason {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--size-meta);
   color: var(--held-back);
 }
 
@@ -1564,7 +1604,7 @@ textarea {
 
 .sources-header h3 {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: var(--size-heading-section);
   margin: 0;
   color: var(--espresso);
 }
@@ -1605,8 +1645,9 @@ textarea {
   gap: 1rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--muted-sand);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
 }
 
 .source-item:last-child {
@@ -1615,7 +1656,7 @@ textarea {
 
 .source-number {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--size-meta);
   font-weight: 600;
   color: var(--terracotta);
   min-width: 32px;
@@ -1625,7 +1666,7 @@ textarea {
 
 .source-title-link {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: var(--size-source);
   color: var(--espresso);
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -1640,7 +1681,7 @@ textarea {
 
 .source-meta {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--size-meta);
   color: #6e645a;
   white-space: nowrap;
 }
@@ -1669,7 +1710,7 @@ textarea {
 @media (max-width: 640px) {
   .output-shell { padding-top: 0.75rem; }
   .report-header { padding: 1.5rem 1.25rem 1rem; }
-  .report-title { font-size: 2rem; }
+  .report-title { font-size: 2.2rem; }
   .report-meta-grid { grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.25rem; }
   .exec-summary { padding: 1.5rem 1.25rem; }
   .findings-section { padding: 0 1.25rem 1.5rem; }
@@ -1683,6 +1724,8 @@ textarea {
   .confidence-badge { margin-left: 0; }
   .finding-meta { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
   .source-meta { white-space: normal; }
+  .exec-summary h2, .findings-section h2, .discussion-points h2, .open-questions h2, .held-back-section h2 { font-size: 1.6rem; }
+  .finding-title { font-size: 1.1rem; }
 }
 
 @media (max-width: 480px) {
@@ -1705,7 +1748,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.72rem 1.1rem;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: var(--size-label);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--dur-fast);
@@ -1732,7 +1775,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.72rem 1.2rem;
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: var(--size-button);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--dur-fast);
@@ -1774,7 +1817,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.9rem;
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: var(--size-label);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--dur-fast);
@@ -1867,7 +1910,7 @@ textarea {
 
 .meta-chip {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #6e645a;
@@ -1922,7 +1965,7 @@ textarea {
 
 .viz-doc-header {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #6e645a;
@@ -2032,7 +2075,7 @@ textarea {
   transform: translateX(-50%);
   z-index: 6;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #6e645a;
@@ -2073,7 +2116,7 @@ textarea {
 
 .stage-legend {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -2119,8 +2162,8 @@ textarea {
 
 .stage-number {
   display: block;
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: var(--size-meta);
+  font-weight: 500;
   margin-bottom: 0.15rem;
 }
 
@@ -2162,7 +2205,7 @@ textarea {
 
 .categories h3 {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #6e645a;
@@ -2220,8 +2263,9 @@ textarea {
   gap: 0.6rem;
   padding: 0.55rem 0;
   border-bottom: 1px solid var(--muted-sand);
-  font-size: 0.88rem;
-  line-height: 1.4;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
   animation: slideUp var(--dur-fast) var(--ease);
 }
 
@@ -2234,14 +2278,14 @@ textarea {
 
 .live-time {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--size-meta);
   color: #6e645a;
   white-space: nowrap;
 }
 
 .live-label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--size-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #6e645a;
@@ -2266,14 +2310,16 @@ textarea {
 
 .error-state h2 {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-size: var(--size-heading-section);
+  line-height: var(--lh-heading);
   margin-bottom: 0.75rem;
 }
 
 .error-state p {
+  font-family: var(--font-sans);
   color: #6e645a;
   margin-bottom: 1.5rem;
-  line-height: 1.5;
+  line-height: var(--lh-body);
 }
 
 .btn-tertiary {
@@ -2283,7 +2329,7 @@ textarea {
   border-radius: var(--radius-sm);
   padding: 0.75rem 1.4rem;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: var(--size-label);
   font-weight: 500;
   cursor: pointer;
   transition: all var(--dur-fast);
@@ -2366,7 +2412,7 @@ textarea {
 
 .sources-header h3 {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: var(--size-heading-section);
   margin: 0;
   color: var(--espresso);
 }
@@ -2407,8 +2453,9 @@ textarea {
   gap: 1rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--muted-sand);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: var(--size-body);
+  line-height: var(--lh-body);
 }
 
 .source-item:last-child {
@@ -2417,7 +2464,7 @@ textarea {
 
 .source-number {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--size-meta);
   font-weight: 600;
   color: var(--terracotta);
   min-width: 32px;
@@ -2427,7 +2474,7 @@ textarea {
 
 .source-title-link {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: var(--size-source);
   color: var(--espresso);
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -2442,7 +2489,7 @@ textarea {
 
 .source-meta {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--size-meta);
   color: #6e645a;
   white-space: nowrap;
 }
@@ -2472,7 +2519,7 @@ textarea {
 @media (max-width: 640px) {
   .output-shell { padding-top: 0.75rem; }
   .report-header { padding: 1.5rem 1.25rem 1rem; }
-  .report-title { font-size: 2rem; }
+  .report-title { font-size: 2.2rem; }
   .report-meta-grid { grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem 1.25rem; }
   .exec-summary { padding: 1.5rem 1.25rem; }
   .findings-section { padding: 0 1.25rem 1.5rem; }
@@ -2497,6 +2544,8 @@ textarea {
   .report-actions { flex-direction: column; }
   .btn-nav-primary { width: 100%; justify-content: center; }
   .btn-nav { width: 100%; justify-content: center; }
+  .exec-summary h2, .findings-section h2, .discussion-points h2, .open-questions h2, .held-back-section h2 { font-size: 1.4rem; }
+  .finding-title { font-size: 1rem; }
 }
 
 /* ==========================================================================
